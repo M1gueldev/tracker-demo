@@ -1,0 +1,23 @@
+{
+  "name": "tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "udp": "node src/index.js udp",
+    "ws": "node src/index.js ws",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "redis": "^4.6.12",
+    "ws": "^8.16.0"
+  }
+}
