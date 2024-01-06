@@ -58,7 +58,7 @@
     connection.onmessage = (e) => {
         const pos = JSON.parse(e.data)
         console.log(pos)
-        marker.setLatLng([pos.lat, pos.lon])
+        marker.setLatLng([pos.lon, pos.lat])
     }
 </script>
 </body>
