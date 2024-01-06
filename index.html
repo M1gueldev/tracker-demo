@@ -46,7 +46,7 @@
     const url = 'ws://161.35.130.60:7071'
     const connection = new WebSocket(url)
     const p = document.getElementById("test")
-
+    let marker = L.marker([0,0]).addTo(map)
     connection.onopen = () => {
         connection.send('Message From Client')
     }
@@ -56,7 +56,9 @@
     }
 
     connection.onmessage = (e) => {
-        console.log(e.data)
+        const pos = JSON.parse(e.data)
+        console.log(pos)
+        marker.setLatLng([pos.lat, pos.lon])
     }
 </script>
 </body>
