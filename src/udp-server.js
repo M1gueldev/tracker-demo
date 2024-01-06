@@ -13,7 +13,7 @@ export async function initUdp() {
 
     server.on('message',async (msg, rinfo) => {
         console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
-        await conn.sendCommand(['PUBLISH', 'loc', JSON.stringify(msg)])
+        await conn.sendCommand(['PUBLISH', 'loc', JSON.stringify(msg)]).then((x) => {console.log("REdis Ans: ", JSON.stringify(x)); return x})
     });
 
     server.on('listening', () => {
