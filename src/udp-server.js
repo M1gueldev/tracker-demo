@@ -1,25 +1,32 @@
-import dgram from 'node:dgram';
+import net from 'node:net';
 import {connect} from "./redis.js";
 
 export async function initUdp() {
-    const server = dgram.createSocket('udp4');
+    const conn = await connect()
+    const server = net.createServer((s) => {
+        console.log('Client Connected')
+        s.on('end', () => {
+            console.log("Client disconnected")
+        })
+        s.on('data', (msg => {
+            console.log(`server got: ${msg} from ${s.address().address}:${s.address().port}`);
+            conn.sendCommand(['PUBLISH', 'loc', msg.toString()])
+                .then((x) => {
+                    console.log("Redis Ans: ", JSON.stringify(x));
+                    s.write(Buffer.from(JSON.stringify(x)))
+                })
+        }))
+    });
 
-    let conn = await connect()
 
     server.on('error', (err) => {
         console.error(`server error:\n${err.stack}`);
         server.close();
     });
 
-    server.on('message',async (msg, rinfo) => {
-        console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
-        await conn.sendCommand(['PUBLISH', 'loc', JSON.stringify(msg)]).then((x) => {console.log("REdis Ans: ", JSON.stringify(x)); return x})
-    });
 
-    server.on('listening', () => {
+    server.listen(8088, () => {
         const address = server.address();
         console.log(`server listening ${address.address}:${address.port}`);
     });
-
-    server.bind(41234);
 }
